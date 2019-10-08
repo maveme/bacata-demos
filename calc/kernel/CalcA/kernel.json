@@ -1,0 +1,15 @@
+{
+	"argv": [
+		"java",
+		"-jar",
+ 		
+		"/Users/mauricio/Documents/ResearchProjects/bacata/bacata-rascal/target/bacata-dsl.jar",
+		"{connection_file}",
+		"home:///Documents/Papers/Papers/SLE18/Code/calc/src",
+		"CalcREPL::myRepl",
+		"CalcA"
+ 		,"home:///Documents/Rascal/salix/src"
+	],
+	"display_name": "CalcA",
+	"language": "CalcA"
+}

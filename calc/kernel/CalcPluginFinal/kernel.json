@@ -1,0 +1,15 @@
+{
+	"argv": [
+		"java",
+		"-jar",
+ 		
+		"/Applications/Eclipse3.app/Contents/Eclipse/plugins/bacata-rascal_0.2.0.201901192251.jar",
+		"{connection_file}",
+		"home:///Documents/Papers/Papers/SLE18/Code/calc/src",
+		"CalcREPL::myRepl",
+		"CalcPluginFinal"
+ 		,"home:///Downloads/salix-scoped-salix/src"
+	],
+	"display_name": "CalcPluginFinal",
+	"language": "CalcPluginFinal"
+}

@@ -1,0 +1,15 @@
+{
+	"argv": [
+		"java",
+		"-jar",
+ 		
+		"/Users/mauricio/Documents/ResearchProjects/bacata/bacata-rascal/target/bacata-rascal-0.2.0-SNAPSHOT.jar",
+		"{connection_file}",
+		"home:///Documents/Papers/Papers/SLE18/Code/calc/src",
+		"CalcREPL::myRepl",
+		"CalcSLE"
+ 		,"home:///Documents/Rascal/salix/src"
+	],
+	"display_name": "CalcSLE",
+	"language": "CalcSLE"
+}
