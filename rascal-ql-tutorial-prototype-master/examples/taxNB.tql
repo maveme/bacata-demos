@@ -1,4 +1,4 @@
-var asadf = form taxOfficeExample { 
+form asadf = taxOfficeExample { 
   "Did you buy a house in 2010?"
     hasBoughtHouse: boolean
     
