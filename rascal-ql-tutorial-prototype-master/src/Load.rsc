@@ -10,4 +10,4 @@ CommandForm loadExample(str file) = load(|project://RascalQLTutorial/examples/<f
 
 CommandForm implodeQL(Tree f) = implode(#CommandForm, f);
 
-CommandForm implodeForm(Tree f) = implode(#CommandForm, f);
+Form implodeForm(Tree f) = implode(#Form, f);

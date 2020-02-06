@@ -25,12 +25,12 @@ import bacata::util::Util;
 import salix::lib::Dagre;
 
 public REPL qlREPL(){
-	return repl( handl, complet, visualization = makeSalixMultiplexer(|http://localhost:3434|, |tmp:///|) );
+	return repl( handl, complet, visualization = makeSalixMultiplexer(|http://localhost:3435|, |tmp:///|) );
 } 
 
 map[str, AST::Form] history = ();
 
-Form astt = form("",[]);
+Form astt = AST::form("",[]);
 
 CommandResult handl(str line){
 	errors=[];
@@ -43,11 +43,11 @@ CommandResult handl(str line){
 			    msgs = check(imploForm) + cyclicErrors(controlDeps(imploForm));
 			    if (msgs == {}) {
 			    	history += ("<idss>" : imploForm);
-			        return textual("ok", messages = errors);
+			        return commandResult("ok", messages = errors);
 			     }
 			     else{
 			     	errors = translateErrorMessages(msgs);
-					return textual(result, messages = errors);
+					return commandResult(result, messages = errors);
 			     }
 			}
 			case (CommandForm)`visualize(<Id idd>)`: {
@@ -58,14 +58,14 @@ CommandResult handl(str line){
 				thisForm = getForm("<idd>");
 				rst = "\<script\><compile(desugar(thisForm))>\</script\>";
 			    rst += toHTML(viewQlForm);
-				return textual("<rst>", messages = errors);
+				return commandResult("<rst>", messages = errors);
 			}
 		}
 	}
 	catch ParseError(lo):
 	{
 		errors = [error("Parse error at <lo>")];
-		return textual("", messages = errors);
+		return commandResult("", messages = errors);
 	}
 }
 
@@ -75,7 +75,7 @@ Form getForm(str idd){
 	}
 	catch: {	
 		errors = translateErrorMessages(msgs);
-		return textual("", messages = errors);
+		return commandResult("", messages = errors);
 	}
 }
 
