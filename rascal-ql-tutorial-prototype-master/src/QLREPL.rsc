@@ -12,6 +12,7 @@ import ParseTree;
 import NotebookQL;
 import QL;
 import Load;
+import bacata::REPL;
 import bacata::salix::Bridge;
 import bacata::util::Proposer;
 import exercises::Part2;
