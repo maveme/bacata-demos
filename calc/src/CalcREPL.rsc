@@ -1,6 +1,7 @@
 module CalcREPL
 
 import IO;
+import Map;
 import String;
 import Exception;
 import Syntax;
@@ -13,34 +14,49 @@ import salix::Core;
 import salix::Node;
 import bacata::util::Util;
 import salix::lib::Dagre;
+//import bacata::REPL;
 import bacata::util::Proposer;
+
+import util::REPL;
+
+import bacata::Notebook;
+
+NotebookServer nb(bool d = false) {
+	Kernel k = kernel("Calc",  |home:///Documents/tmp/bacata-demos/calc/src/|, "CalcREPL::myRepl", salixPath=|home:///salix/src|);
+	return createNotebook(k, debug = d );
+}
 
 
 REPL myRepl() {
   Env env = ();
   
-  CommandResult myHandler(str line) {
+  Response myHandler(str input) {
     try {
-    	Syntax::Cmd cmd = parse(#start[Cmd], line).top;
+    	Syntax::Cmd cmd = parse(#start[Cmd], input).top;
     	if ((Cmd)`show <Exp e>` := cmd) {
- 			return salix(expApp(e, env));
+ 			//return salix(expApp(e, env));
+ 			return plain(e); // TODO: update the Salix stuff.
 		}
 		else {
       		<env, n> = exec(cmd, env);
-      		return commandResult("<n>", messages = []);
+      		return plain("<n>");
       	}
     }
     catch ParseError(loc l):
-      return commandResult("", messages = [error("Parse error", l)]);
+    	return plain("Error");
   }
 
   Completion myCompletor(str prefix, int offset)
     =  <0, [ x | x <- env, startsWith(x, prefix) ]>; 
 
-  return repl(myHandler, myCompletor, visualization = makeSalixMultiplexer(|http://localhost:3439|, |tmp:///|));
+return repl(handler = myHandler, completor = myCompletor);
+  //return repl(myHandler, myCompletor, visualization = makeSalixMultiplexer(|http://localhost:3437|, |tmp:///|));
 }
 
+
+
 data Msg = change(str x, str val);
+
 
 SalixApp[Env] expApp(Exp e, Env env) {
 	Env init() = env; 
@@ -57,5 +73,6 @@ SalixApp[Env] expApp(Exp e, Env env) {
 
 	Env update(change(x, v), Env env) 
 		= env + (x: toInt(v));
+		
 	return makeApp(init, view, update);
 }
