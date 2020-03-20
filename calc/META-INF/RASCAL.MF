@@ -1,6 +1,7 @@
 Manifest-Version: 0.0.1
 Main-Function: main
 Courses: courses
+Project-Name: calc
 Main-Module: Plugin
 Source: src
-
+Require-Libraries: |lib://salix|, |lib://bacata-rascal|
