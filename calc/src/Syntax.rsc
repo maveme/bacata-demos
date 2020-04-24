@@ -5,8 +5,8 @@ extend lang::std::Id;
 extend lang::std::Layout;
 
 start syntax Cmd 
-		= Id "=" Exp
-		| "show" Exp 
+		= Id lhs "=" Exp rhs
+		| "show" Exp ex
 		| Exp;
 
 syntax Exp
