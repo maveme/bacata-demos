@@ -12,8 +12,9 @@ import ParseTree;
 import NotebookQL;
 import QL;
 import Load;
-import bacata::REPL;
-import bacata::salix::Bridge;
+//import bacata::REPL;
+import util::REPL;
+//import bacata::salix::Bridge;
 import bacata::util::Proposer;
 import exercises::Part2;
 import AST;
@@ -25,15 +26,21 @@ import salix::Node;
 import bacata::util::Util;
 import salix::lib::Dagre;
 
-public REPL qlREPL(){
-	return repl( handl, complet, visualization = makeSalixMultiplexer(|http://localhost:3435|, |tmp:///|) );
-} 
+import bacata::Notebook;
+
+NotebookServer createQLnb(bool d = false) {
+	Kernel k = kernel("QL-2020",  |home:///Documents/tmp/bacata-demos/rascal-ql-tutorial-prototype-master/src/|, "QLREPL::qlREPL", salixPath=|home:///Documents/Rascal/salix/src|);
+	return createNotebook(k, debug = d );
+}
+
+public REPL qlREPL()
+	= repl(handler = handl, completor = complet); 
 
 map[str, AST::Form] history = ();
 
 Form astt = AST::form("",[]);
 
-CommandResult handl(str line){
+Content handl(str line){
 	errors=[];
 	result = "";
 	try {
@@ -44,29 +51,35 @@ CommandResult handl(str line){
 			    msgs = check(imploForm) + cyclicErrors(controlDeps(imploForm));
 			    if (msgs == {}) {
 			    	history += ("<idss>" : imploForm);
-			        return commandResult("ok", messages = errors);
+			    	return html("ok");
+			        //return commandResult("ok", messages = errors);
 			     }
 			     else{
 			     	errors = translateErrorMessages(msgs);
-					return commandResult(result, messages = errors);
+			     	return html(errors);
+					//return commandResult(result, messages = errors);
 			     }
 			}
 			case (CommandForm)`visualize(<Id idd>)`: {
 				astt = getForm("<idd>");
-				return salix(makeApp(init, view, update));
+				SalixApp[Model] app = makeApp("ql", init, view, update);
+				return webApp(app, index = |tmp:///|, static = |tmp:///|, headers = ("Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept"));
+				//return salix(makeApp(init, view, update));
 			}
 			case (CommandForm)`html(<Id idd>)`: {
 				thisForm = getForm("<idd>");
 				rst = "\<script\><compile(desugar(thisForm))>\</script\>";
 			    rst += toHTML(viewQlForm);
-				return commandResult("<rst>", messages = errors);
+			    return html("<rst> | <errors>");
+				//return commandResult("<rst>", messages = errors);
 			}
 		}
 	}
 	catch ParseError(lo):
 	{
 		errors = [error("Parse error at <lo>")];
-		return commandResult("", messages = errors);
+		return html("");
+		//return commandResult("", messages = errors);
 	}
 }
 
@@ -76,7 +89,8 @@ Form getForm(str idd){
 	}
 	catch: {	
 		errors = translateErrorMessages(msgs);
-		return commandResult("", messages = errors);
+		return html("");
+		//return commandResult("", messages = errors);
 	}
 }
 
